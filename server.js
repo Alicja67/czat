@@ -31,11 +31,14 @@ io.on('connection', (socket) => {
       name: user,
       id: socket.id,
     });
+    socket.broadcast.emit('newUser', user);
     console.log(`Oh, I\'ve got new user: ${user} - ${socket.id}`);
     console.log('users', users);
   });
   socket.on('disconnect', () => { 
     console.log('Oh, socket ' + socket.id + ' has left');
+    socket.broadcast.emit('removeUser', (users[users.findIndex(user => user.id === socket.id)].name));
+    console.log('index', users[users.findIndex(user => user.id === socket.id)].name);
     users.splice(users.findIndex(user => user.id === socket.id), 1);
   });
   console.log('I\'ve added a listener on message and disconnect events \n');

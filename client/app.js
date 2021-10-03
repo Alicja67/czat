@@ -1,6 +1,8 @@
 let userName = '';
 const socket = io();
 socket.on('message', ({author, content}) => addMessage(author, content));
+socket.on('newUser', user => addMessage('ChatBot', `${user} has joined the conversation!`));
+socket.on('removeUser', user => addMessage('ChatBot', `${user} has left the conversation :()`));
 
 const ref = {
   loginForm: document.getElementById('welcome-form'),
@@ -27,7 +29,7 @@ const addMessage = (author, content) => {
   const message = document.createElement('li');
   message.classList.add('message');
   message.classList.add('message--received');
-  if (author === userName) message.classList.add('message--self');
+  if(author === userName) message.classList.add('message--self');
   if(author === 'ChatBot') message.classList.add('message--bot');
 
   message.innerHTML = `
